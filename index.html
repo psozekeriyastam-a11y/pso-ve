@@ -1,1 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PSO VE | Professional Video Editing & Portfolio</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0d1728;
+      --card: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.10);
+      --text: #f5f7fb;
+      --muted: #aeb8cc;
+      --accent: #7c5cff;
+      --accent-2: #2ccfbe;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 92, 255, 0.20), transparent 30%),
+        radial-gradient(circle at top right, rgba(44, 207, 190, 0.12), transparent 24%),
+        linear-gradient(180deg, #050914 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 9, 20, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+      color: white;
+      font-weight: 900;
+    }
+
+    nav ul {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    nav a:hover { color: white; }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .top-actions .btn { padding: 11px 14px; border-radius: 12px; font-size: 0.95rem; }
+
+    .hero { padding: 76px 0 44px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      line-height: 0.95;
+      margin: 18px 0 18px;
+      letter-spacing: -0.06em;
+    }
+
+    .lead {
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 60ch;
+      margin-bottom: 28px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+      color: white;
+    }
+
+    .btn.dark {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.12);
+      color: white;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .stat span { color: var(--muted); font-size: 0.94rem; line-height: 1.5; }
+
+    .visual {
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .mock-screen {
+      aspect-ratio: 4 / 5;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(10,16,31,0.92), rgba(14,23,40,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mock-screen::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -90px;
+      top: -90px;
+      border-radius: 50%;
+      background: rgba(124, 92, 255, 0.22);
+      filter: blur(10px);
+    }
+
+    .screen-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-card {
+      position: relative;
+      z-index: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 300px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      display: grid;
+      align-content: end;
+    }
+
+    .preview-image {
+      height: 210px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.70)),
+        url('https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1200&q=80') center/cover;
+    }
+
+    .preview-content {
+      padding: 16px;
+      background: rgba(5, 9, 20, 0.75);
+      backdrop-filter: blur(10px);
+    }
+
+    .preview-content h3 { margin: 0 0 8px; }
+    .preview-content p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+
+    section { padding: 28px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+      line-height: 1.7;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 { margin-top: 0; margin-bottom: 10px; }
+    .card p { color: var(--muted); line-height: 1.7; margin: 0; }
+
+    .portfolio {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .work-item { overflow: hidden; padding: 0; }
+
+    .work-media {
+      aspect-ratio: 16 / 10;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .work-body { padding: 18px; }
+    .work-body small { color: var(--accent-2); font-weight: 700; letter-spacing: 0.04em; }
+    .work-body h3 { margin: 8px 0 10px; }
+    .work-body p { color: var(--muted); line-height: 1.7; margin: 0; }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-top: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(124, 92, 255, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .timeline-item h4 { margin: 0 0 4px; }
+    .timeline-item p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .contact-box {
+      padding: 22px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-box label {
+      display: block;
+      font-weight: 700;
+      margin: 14px 0 8px;
+    }
+
+    .contact-box input,
+    .contact-box textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: white;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font: inherit;
+      outline: none;
+    }
+
+    .contact-box textarea { min-height: 140px; resize: vertical; }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: white;
+      font-weight: 700;
+    }
+
+    .social-link:hover { transform: translateY(-2px); }
+
+    .footer {
+      padding: 28px 0 40px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .portfolio,
+      .contact,
+      .grid-3 { grid-template-columns: 1fr; }
+
+      nav ul { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .social-grid { grid-template-columns: 1fr; }
+      .top-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">P</div>
+        <div>PSO VE</div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#social">Social</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="top-actions">
+        <a class="btn dark" href="#login">Login</a>
+        <a class="btn secondary" href="#signup">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">🎬 Professional video editing and portfolio website</div>
+        <h1>PSO VE</h1>
+        <p class="lead">
+          A clean, modern website to present your video editing work, show your portfolio,
+          and make your brand look professional online.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" href="#portfolio">View Portfolio</a>
+          <a class="btn secondary" href="#contact">Contact Me</a>
+          <a class="btn dark" href="#whatsapp">WhatsApp</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>Clean Design</strong>
+            <span>Simple layout with a premium feel</span>
+          </div>
+          <div class="stat">
+            <strong>Video Focus</strong>
+            <span>Perfect for edits, reels, and promo work</span>
+          </div>
+          <div class="stat">
+            <strong>Easy to Launch</strong>
+            <span>Free to host and easy to customize</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual">
+        <div class="mock-screen">
+          <div class="screen-top">
+            <span>PSO VE Studio</span>
+            <span>Portfolio Preview</span>
+          </div>
+          <div class="preview-card">
+            <div class="preview-image"></div>
+            <div class="preview-content">
+              <h3>Featured Project</h3>
+              <p>Show one strong edit with a short description and a polished cover image.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>Services</h2>
+        <p>Show people what PSO VE offers. Keep it short, clear, and professional.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Video Editing</h3>
+          <p>Reels, short-form content, promo videos, captions, and clean transitions.</p>
+        </div>
+        <div class="card">
+          <h3>Portfolio Showcase</h3>
+          <p>Present your best projects with titles, thumbnails, and short descriptions.</p>
+        </div>
+        <div class="card">
+          <h3>Brand Identity</h3>
+          <p>Create a stronger online presence with a modern and memorable design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="container">
+      <div class="section-head">
+        <h2>Portfolio</h2>
+        <p>Replace the sample work below with your real videos, screenshots, or client projects.</p>
+      </div>
+
+      <div class="portfolio">
+        <div class="work-grid">
+          <article class="card work-item">
+            <div class="work-media" style="background-image:url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="work-body">
+              <small>Editing Reel</small>
+              <h3>Social Media Highlight</h3>
+              <p>A sharp, fast-paced edit for Instagram, TikTok, or YouTube Shorts.</p>
+            </div>
+          </article>
+
+          <article class="card work-item">
+            <div class="work-media" style="background-image:url('https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="work-body">
+              <small>Client Project</small>
+              <h3>Brand Promo Video</h3>
+              <p>A polished promotional video with smooth motion and clean storytelling.</p>
+            </div>
+          </article>
+
+          <article class="card work-item">
+            <div class="work-media" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="work-body">
+              <small>Creative Edit</small>
+              <h3>Cinematic Story</h3>
+              <p>Great for montage edits, cinematic scenes, and emotional storytelling.</p>
+            </div>
+          </article>
+
+          <article class="card work-item">
+            <div class="work-media" style="background-image:url('https://images.unsplash.com/photo-1522120692530-7f5d2f3f2bff?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="work-body">
+              <small>Thumbnail</small>
+              <h3>Video Cover Design</h3>
+              <p>Add your title graphics, thumbnails, or posters for a full portfolio look.</p>
+            </div>
+          </article>
+        </div>
+
+        <aside class="card">
+          <h3>Make it stronger</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="dot"></div>
+              <div>
+                <h4>Add your best work first</h4>
+                <p>Put your strongest video at the top so visitors notice it immediately.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="dot"></div>
+              <div>
+                <h4>Use real project names</h4>
+                <p>Give each project a professional title instead of a generic label.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="dot"></div>
+              <div>
+                <h4>Add your contact details</h4>
+                <p>Include WhatsApp, email, Instagram, or another direct contact link.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="social">
+    <div class="container">
+      <div class="section-head">
+        <h2>Social Media</h2>
+        <p>Connect your Instagram, TikTok, YouTube, and WhatsApp so people can reach you fast.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Instagram</h3>
+          <p>Share reels, edits, behind-the-scenes clips, and your newest work.</p>
+        </div>
+        <div class="card">
+          <h3>TikTok / Shorts</h3>
+          <p>Post fast edits, transitions, and short creative video samples.</p>
+        </div>
+        <div class="card" id="whatsapp">
+          <h3>WhatsApp</h3>
+          <p>Use WhatsApp for direct messages, project inquiries, and quick replies.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <h3>Quick links</h3>
+        <div class="social-grid">
+          <a class="social-link" href="https://wa.me/0000000000" target="_blank" rel="noreferrer">💬 WhatsApp</a>
+          <a class="social-link" href="https://instagram.com/" target="_blank" rel="noreferrer">📷 Instagram</a>
+          <a class="social-link" href="https://tiktok.com/" target="_blank" rel="noreferrer">🎵 TikTok</a>
+          <a class="social-link" href="https://youtube.com/" target="_blank" rel="noreferrer">▶ YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="login">
+    <div class="container">
+      <div class="section-head">
+        <h2>Login</h2>
+        <p>This is a clean login section for your site. For real login, you will need a backend later.</p>
+      </div>
+
+      <div class="contact-box">
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" placeholder="Enter your email" />
+
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" placeholder="Enter your password" />
+
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+          <a class="btn primary" href="#">Login</a>
+          <a class="btn secondary" href="#signup">Go to Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="signup">
+    <div class="container">
+      <div class="section-head">
+        <h2>Sign Up</h2>
+        <p>Use this to let people create an account before booking or contacting you.</p>
+      </div>
+
+      <div class="contact-box">
+        <label for="signup-name">Full Name</label>
+        <input id="signup-name" type="text" placeholder="Your full name" />
+
+        <label for="signup-email">Email</label>
+        <input id="signup-email" type="email" placeholder="Your email" />
+
+        <label for="signup-password">Password</label>
+        <input id="signup-password" type="password" placeholder="Create a password" />
+
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+          <a class="btn primary" href="#">Create Account</a>
+          <a class="btn dark" href="#payment">Go to Payment</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="payment">
+    <div class="container">
+      <div class="section-head">
+        <h2>Payment</h2>
+        <p>Add your payment method here when you are ready to sell editing services or packages.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Basic Edit</h3>
+          <p>Short edits, clean cuts, and simple social media content.</p>
+          <p style="margin-top:12px; color:white; font-weight:700;">Payment button placeholder</p>
+        </div>
+        <div class="card">
+          <h3>Pro Edit</h3>
+          <p>More advanced effects, captions, transitions, and branding.</p>
+          <p style="margin-top:12px; color:white; font-weight:700;">Payment button placeholder</p>
+        </div>
+        <div class="card">
+          <h3>Premium Package</h3>
+          <p>Best for serious clients who want polished and professional work.</p>
+          <p style="margin-top:12px; color:white; font-weight:700;">Payment button placeholder</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <p>Make it easy for people to reach PSO VE for editing work or portfolio inquiries.</p>
+      </div>
+
+      <div class="contact">
+        <div class="contact-box">
+          <h3>Send a message</h3>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" />
+
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="Your email" />
+
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell me about your project"></textarea>
+
+          <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+            <a class="btn primary" href="mailto:your@email.com">Email PSO VE</a>
+            <a class="btn dark" href="https://wa.me/0000000000" target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="contact-box">
+          <h3>About PSO VE</h3>
+          <p style="color: var(--muted); line-height: 1.8; margin-top: 0;">
+            PSO VE is your personal creative brand for video editing and portfolio presentation.
+            This layout is designed to look professional, simple, and trustworthy.
+          </p>
+          <div class="timeline" style="margin-top:18px;">
+            <div class="timeline-item">
+              <div class="dot"></div>
+              <div>
+                <h4>Free to publish</h4>
+                <p>Save this file as <strong>index.html</strong> and upload it for free.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="dot"></div>
+              <div>
+                <h4>Easy to customize</h4>
+                <p>You can change colors, images, text, and project names anytime.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    © <span id="year"></span> PSO VE. All rights reserved.
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
 
